@@ -1,7 +1,7 @@
 from EmotionDetector.EmotionDetector import EmotionDetector
 import unittest
 
-class TestEmotionDetection(unittest.TestCase):
+class TestEmotionDetector(unittest.TestCase):
     def setUp(self):
         self.detector = EmotionDetector()
 

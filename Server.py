@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 from EmotionDetector.EmotionDetector import EmotionDetector
 
-
 class Server:
     def __init__(self):
         self.app = Flask(__name__)
@@ -9,10 +8,13 @@ class Server:
         self.setup_routes()
 
     def setup_routes(self):
-        @self.app.route('/emotionDetector', methods=['POST'])
+        @self.app.route('/emotionDetector', methods=['GET', 'POST'])
         def emotion_detector():
-            data = request.get_json()
-            text_to_analyze = data.get("text", "")
+            if request.method == 'GET':
+                text_to_analyze = request.args.get("textToAnalyze", "")
+            else:
+                data = request.get_json()
+                text_to_analyze = data.get("text", "")
 
             if not text_to_analyze:
                 return jsonify({"error": "No text provided"}), 400

@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from EmotionDetector.EmotionDetector import EmotionDetector
 
+
 class Server:
     def __init__(self):
         self.app = Flask(__name__)
@@ -20,14 +21,12 @@ class Server:
                 return jsonify({"error": "No text provided"}), 400
 
             result = self.detector.emotion_detector(text_to_analyze)
-            text = "For the given statement, the system response is"
-            for key, emotion in result:
-                if key != 'dominant_emotion':
-                    text += key + ":" + emotion
-            text += "The dominant emotion is {result['dominant_emotion']}."
-            response_text = (
-                text
-            )
+            dominant_emotion = result.get("dominant_emotion", "unknown")
+
+            response_text = "For the given statement, the system response is "
+            response_text += ", ".join(
+                [f"{key}: {value}" for key, value in result.items() if key != 'dominant_emotion'])
+            response_text += f". The dominant emotion is {dominant_emotion}."
 
             return jsonify({"response": response_text})
 

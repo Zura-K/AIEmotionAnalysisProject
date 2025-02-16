@@ -1,18 +1,31 @@
+"""
+Flask server for emotion detection application.
+Handles API requests and renders web interface.
+"""
+
 from flask import Flask, request, jsonify, render_template
 from EmotionDetector.EmotionDetector import EmotionDetector
 
 class Server:
+    """Server class to handle emotion detection API and web interface."""
 
     def __init__(self):
+        """Initialize the Flask app and set up routes."""
         self.app = Flask(__name__)
         self.detector = EmotionDetector()
         self.setup_routes()
 
     def setup_routes(self):
+        """Define API and web routes for the Flask app."""
 
         @self.app.route('/emotionDetector', methods=['GET', 'POST'])
         def emotion_detector():
+            """
+            Handles emotion detection requests via GET and POST methods.
 
+            Returns:
+                JSON: Emotion analysis or error message.
+            """
             if request.method == 'GET':
                 text_to_analyze = request.args.get("textToAnalyze", "")
                 response_code = int(request.args.get("status_code", 200))
@@ -40,11 +53,20 @@ class Server:
 
         @self.app.route('/')
         def home():
+            """
+            Renders the home page.
 
+            Returns:
+                HTML: The rendered index page.
+            """
             return render_template('index.html')
 
     def run(self):
+        """
+        Runs the Flask application.
 
+        Starts the Flask app on port 5000.
+        """
         self.app.run(host='0.0.0.0', port=5000, debug=True)
 
 if __name__ == '__main__':
